@@ -1,0 +1,3026 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexConnect — Connect. Create. Earn.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-2: #f1f5f9;
+      --surface-3: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #7c3aed;
+      --primary-2: #4f46e5;
+      --success: #10b981;
+      --danger: #f43f5e;
+      --warning: #f59e0b;
+      --info: #0ea5e9;
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 55%, #06b6d4 100%);
+      --earn-gradient: linear-gradient(135deg, #10b981, #14b8a6);
+      --rose-gradient: linear-gradient(135deg, #f43f5e, #fb7185);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #020617;
+      --surface: #0f172a;
+      --surface-2: #111c31;
+      --surface-3: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.2);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.16), transparent 34%),
+        radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: Sora, sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: var(--gradient);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      box-shadow: 0 18px 35px rgba(124, 58, 237, 0.35);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 800;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      transform: rotate(28deg);
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 1.18rem;
+      line-height: 1;
+    }
+
+    .brand-text span {
+      display: block;
+      font-family: Inter, sans-serif;
+      letter-spacing: 0;
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 700;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: #fff;
+      box-shadow: 0 18px 34px rgba(124, 58, 237, 0.28);
+    }
+
+    .btn-success {
+      background: var(--earn-gradient);
+      color: #fff;
+      box-shadow: 0 18px 34px rgba(16, 185, 129, 0.22);
+    }
+
+    .btn-danger {
+      background: var(--rose-gradient);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-light {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(14px);
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      position: relative;
+      transition: 0.18s ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .field {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      outline: none;
+      font-size: 0.96rem;
+      transition: 0.18s ease;
+    }
+
+    .field:focus {
+      border-color: rgba(124, 58, 237, 0.75);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+    }
+
+    .label {
+      font-weight: 800;
+      font-size: 0.86rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-row {
+      margin-bottom: 14px;
+    }
+
+    .auth-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      padding: 22px;
+      gap: 22px;
+    }
+
+    .auth-art {
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.28), transparent 24%),
+        radial-gradient(circle at 84% 20%, rgba(16,185,129,0.32), transparent 22%),
+        var(--gradient);
+      color: #fff;
+      padding: 42px;
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh - 44px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .auth-art::before,
+    .auth-art::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+    }
+
+    .auth-art::before {
+      width: 320px;
+      height: 320px;
+      right: -110px;
+      bottom: 100px;
+    }
+
+    .auth-art::after {
+      width: 220px;
+      height: 220px;
+      left: -60px;
+      bottom: -60px;
+    }
+
+    .auth-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+
+    .auth-copy h1 {
+      font-family: Sora, sans-serif;
+      font-size: clamp(2.4rem, 6vw, 5.6rem);
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+      margin: 34px 0 18px;
+    }
+
+    .auth-copy p {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    .auth-feature-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .auth-feature {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(18px);
+    }
+
+    .auth-feature strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.95rem;
+    }
+
+    .auth-card-wrap {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      width: min(100%, 470px);
+      border-radius: var(--radius-xl);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      backdrop-filter: blur(18px);
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 6px;
+      border-radius: 18px;
+      background: var(--surface-2);
+      margin: 22px 0;
+      gap: 6px;
+    }
+
+    .auth-tab {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .auth-tab.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: color-mix(in srgb, var(--bg) 78%, transparent);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 0.91rem;
+      transition: 0.18s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .unread-dot {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--danger);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--surface);
+    }
+
+    .avatar-btn {
+      border: 0;
+      background: var(--surface-2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 10px 6px 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .avatar-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--gradient);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+    }
+
+    .dropdown,
+    .notification-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 12px);
+      width: 320px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+      padding: 10px;
+      display: none;
+      z-index: 50;
+    }
+
+    .dropdown.open,
+    .notification-panel.open {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 12px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: var(--surface-2);
+    }
+
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 26px 18px 52px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-family: Sora, sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.06em;
+    }
+
+    .page-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hero {
+      border-radius: var(--radius-xl);
+      min-height: 340px;
+      overflow: hidden;
+      position: relative;
+      background: var(--gradient);
+      box-shadow: var(--shadow);
+      color: #fff;
+      margin-bottom: 22px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.28;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 84% 16%, rgba(255,255,255,0.25), transparent 28%),
+        linear-gradient(135deg, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.48));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: clamp(28px, 5vw, 54px);
+      max-width: 760px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.24);
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-family: Sora, sans-serif;
+      letter-spacing: -0.07em;
+      line-height: 1;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      margin: 0;
+    }
+
+    .hero p {
+      font-size: 1.04rem;
+      line-height: 1.75;
+      opacity: 0.92;
+      max-width: 650px;
+      margin: 18px 0 24px;
+    }
+
+    .filter-panel,
+    .card,
+    .chart-card,
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .filter-panel {
+      padding: 16px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(120px, 1fr)) auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .autocomplete {
+      position: absolute;
+      left: 16px;
+      top: 82px;
+      width: min(420px, calc(100% - 32px));
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 8px;
+      z-index: 20;
+      display: none;
+    }
+
+    .autocomplete.open {
+      display: block;
+    }
+
+    .autocomplete button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 11px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .autocomplete button:hover {
+      background: var(--surface-2);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      transition: 0.18s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .product-image {
+      height: 190px;
+      background: var(--surface-2);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-fallback {
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      gap: 8px;
+      font-weight: 800;
+    }
+
+    .bookmark-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.9);
+      color: #0f172a;
+      cursor: pointer;
+      z-index: 2;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+    }
+
+    .bookmark-btn.active {
+      background: var(--gradient);
+      color: #fff;
+    }
+
+    .product-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-title {
+      font-family: Sora, sans-serif;
+      letter-spacing: -0.035em;
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      line-height: 1.28;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 10px 0;
+    }
+
+    .tag,
+    .badge {
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag {
+      background: rgba(124, 58, 237, 0.11);
+      color: var(--primary);
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success);
+    }
+
+    .badge-danger {
+      background: rgba(244, 63, 94, 0.12);
+      color: var(--danger);
+    }
+
+    .badge-info {
+      background: rgba(14, 165, 233, 0.12);
+      color: var(--info);
+    }
+
+    .badge-gold {
+      background: rgba(245, 158, 11, 0.16);
+      color: #d97706;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 12px;
+    }
+
+    .price {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.18rem;
+      font-weight: 900;
+    }
+
+    .real-price {
+      color: var(--muted);
+      text-decoration: line-through;
+      font-size: 0.82rem;
+      margin-left: 4px;
+    }
+
+    .product-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      background: rgba(124, 58, 237, 0.1);
+      right: -35px;
+      top: -35px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: var(--surface-2);
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    .stat-value {
+      font-family: Sora, sans-serif;
+      font-size: 1.75rem;
+      letter-spacing: -0.055em;
+      margin-top: 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .grid-even {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card,
+    .chart-card,
+    .table-card {
+      padding: 20px;
+    }
+
+    .card-title {
+      font-family: Sora, sans-serif;
+      letter-spacing: -0.04em;
+      margin: 0 0 14px;
+      font-size: 1.22rem;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+    }
+
+    th,
+    td {
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    td {
+      font-weight: 700;
+    }
+
+    .empty {
+      border: 1px dashed var(--border);
+      border-radius: 24px;
+      padding: 36px 18px;
+      text-align: center;
+      color: var(--muted);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+    }
+
+    .empty i {
+      color: var(--primary);
+      width: 42px;
+      height: 42px;
+    }
+
+    .empty h3 {
+      color: var(--text);
+      font-family: Sora, sans-serif;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .notification-list {
+      max-height: 380px;
+      overflow: auto;
+    }
+
+    .notification-item {
+      border-radius: 16px;
+      padding: 12px;
+      display: grid;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .notification-item:hover,
+    .notification-item.unread {
+      background: var(--surface-2);
+    }
+
+    .notification-item small {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 22px;
+    }
+
+    .detail-media {
+      border-radius: 28px;
+      overflow: hidden;
+      min-height: 430px;
+      background: var(--surface-2);
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .detail-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .toolkit-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .copy-box {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 18px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .copy-box p {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.5;
+      font-weight: 650;
+    }
+
+    .link-box {
+      border-radius: 20px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      word-break: break-all;
+    }
+
+    .method-tabs,
+    .period-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .method-tab,
+    .period-tab {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .method-tab.active,
+    .period-tab.active {
+      background: var(--gradient);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .support-thread {
+      display: grid;
+      gap: 12px;
+    }
+
+    .message-bubble {
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    .message-reply {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 15px;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--text);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(2, 6, 23, 0.68);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal {
+      width: min(100%, 560px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      max-height: 92vh;
+      overflow: auto;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .role-card {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 22px;
+      padding: 18px;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .role-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+      background: color-mix(in srgb, var(--surface) 70%, rgba(124, 58, 237, 0.08));
+    }
+
+    .toast-root {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 120;
+      display: grid;
+      gap: 10px;
+      width: min(360px, calc(100vw - 36px));
+    }
+
+    .toast {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-weight: 800;
+    }
+
+    .toast.success i { color: var(--success); }
+    .toast.error i { color: var(--danger); }
+
+    @media (max-width: 1100px) {
+      .product-grid,
+      .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .detail-layout,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .auth-shell {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+
+      .auth-art {
+        min-height: auto;
+        padding: 28px;
+      }
+
+      .auth-feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        margin-left: 0;
+        padding-bottom: 2px;
+      }
+
+      .nav-link {
+        flex: 0 0 auto;
+      }
+
+      .page-head {
+        display: block;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .product-grid,
+      .stat-grid,
+      .grid-even,
+      .form-grid,
+      .role-grid,
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .product-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-card-wrap {
+        padding: 0;
+      }
+
+      .auth-card {
+        padding: 22px;
+      }
+
+      .top-actions {
+        margin-left: auto;
+      }
+
+      .dropdown,
+      .notification-panel {
+        right: -8px;
+        width: min(330px, calc(100vw - 28px));
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toast-root" class="toast-root"></div>
+  <div id="app"></div>
+
+  <script>
+    const DOMAIN = "nexconnect.onrender.com";
+    const SHORT_LINK_BASE = `https://${DOMAIN}/go/`;
+
+    const state = {
+      token: localStorage.getItem("nexconnect_token"),
+      user: null,
+      settings: null,
+      products: [],
+      bookmarks: [],
+      bookmarkIds: new Set(),
+      notifications: [],
+      notificationTimer: null,
+      currentChart: null,
+      onboardingOpen: false
+    };
+
+    document.addEventListener("DOMContentLoaded", init);
+
+    async function init() {
+      initTheme();
+      window.addEventListener("hashchange", router);
+
+      if (state.token) {
+        try {
+          await loadMe();
+          await Promise.all([loadSettings(), loadBookmarks(), loadNotifications()]);
+          startNotificationPolling();
+          await router();
+          maybeShowOnboarding();
+        } catch (error) {
+          logout(false);
+          toast(error.message || "Session expired. Please login again.", "error");
+        }
+      } else {
+        renderAuthFromRoute();
+      }
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem("nexconnect_theme");
+      const preferred = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      setTheme(saved || preferred);
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("nexconnect_theme", theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme") || "light";
+      setTheme(current === "dark" ? "light" : "dark");
+      refreshIcons();
+    }
+
+    async function api(path, options = {}) {
+      const opts = {
+        method: options.method || "GET",
+        headers: {
+          "Accept": "application/json",
+          ...(options.headers || {})
+        }
+      };
+
+      if (options.body !== undefined) {
+        opts.body = options.body;
+        if (!(options.body instanceof FormData)) {
+          opts.headers["Content-Type"] = "application/json";
+        }
+      }
+
+      if (state.token) {
+        opts.headers["Authorization"] = `Bearer ${state.token}`;
+      }
+
+      const response = await fetch(path, opts);
+      const raw = await response.text();
+      let data = {};
+
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        data = { ok: false, error: raw || response.statusText };
+      }
+
+      if (response.status === 401 && state.token) {
+        logout(false);
+      }
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || `Request failed with status ${response.status}`);
+      }
+
+      return data;
+    }
+
+    async function loadMe() {
+      const data = await api("/api/auth/me");
+      state.user = data.user;
+      return state.user;
+    }
+
+    async function loadSettings() {
+      const data = await api("/api/settings");
+      state.settings = data.settings || {};
+      return state.settings;
+    }
+
+    async function loadBookmarks() {
+      if (!state.token) return [];
+      const data = await api("/api/bookmarks");
+      state.bookmarks = data.bookmarks || [];
+      state.bookmarkIds = new Set(state.bookmarks.map(item => item.product_id));
+      return state.bookmarks;
+    }
+
+    async function loadNotifications() {
+      if (!state.token) return [];
+      const data = await api("/api/notifications");
+      state.notifications = data.notifications || [];
+      paintNotificationWidgets();
+      return state.notifications;
+    }
+
+    function startNotificationPolling() {
+      if (state.notificationTimer) clearInterval(state.notificationTimer);
+      state.notificationTimer = setInterval(() => {
+        if (state.token) loadNotifications().catch(() => {});
+      }, 30000);
+    }
+
+    function saveSession(payload) {
+      state.token = payload.token;
+      state.user = payload.user;
+      localStorage.setItem("nexconnect_token", payload.token);
+    }
+
+    async function afterAuth(payload) {
+      saveSession(payload);
+      await Promise.all([loadSettings(), loadBookmarks(), loadNotifications()]);
+      startNotificationPolling();
+      if (!location.hash || location.hash === "#/login" || location.hash.startsWith("#/signup")) {
+        history.replaceState(null, "", "#/home");
+      }
+      await router();
+      maybeShowOnboarding();
+    }
+
+    function logout(showMessage = true) {
+      localStorage.removeItem("nexconnect_token");
+      state.token = null;
+      state.user = null;
+      state.settings = null;
+      state.products = [];
+      state.bookmarks = [];
+      state.bookmarkIds = new Set();
+      state.notifications = [];
+      if (state.notificationTimer) clearInterval(state.notificationTimer);
+      if (state.currentChart) state.currentChart.destroy();
+      state.currentChart = null;
+      history.replaceState(null, "", "#/login");
+      renderAuth("login");
+      if (showMessage) toast("Logged out successfully.", "success");
+    }
+
+    function renderAuthFromRoute() {
+      const route = getRoute();
+      renderAuth(route.name === "signup" ? "signup" : "login");
+    }
+
+    function renderAuth(mode = "login") {
+      const referral = getReferralFromLocation();
+      document.getElementById("app").innerHTML = `
+        <section class="auth-shell">
+          <aside class="auth-art">
+            <div class="auth-copy">
+              <div class="brand">
+                <div class="brand-mark">NC</div>
+                <div class="brand-text">
+                  <strong>NexConnect</strong>
+                  <span>${DOMAIN}</span>
+                </div>
+              </div>
+
+              <h1>Connect. Create. Earn.</h1>
+              <p>Turn your influence into tracked clicks, creator links, referral income, and smooth withdrawals — all from one polished monetization hub.</p>
+
+              <div class="auth-feature-grid">
+                <div class="auth-feature">
+                  <i data-lucide="link-2"></i>
+                  <strong>Smart short links</strong>
+                </div>
+                <div class="auth-feature">
+                  <i data-lucide="bar-chart-3"></i>
+                  <strong>Live analytics</strong>
+                </div>
+                <div class="auth-feature">
+                  <i data-lucide="wallet"></i>
+                  <strong>Fast payouts</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="auth-copy">
+              <span class="badge" style="background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.22);">
+                <i data-lucide="sparkles"></i> Affiliate & Creator Monetization Platform
+              </span>
+            </div>
+          </aside>
+
+          <main class="auth-card-wrap">
+            <div class="auth-card">
+              <div class="brand">
+                <div class="brand-mark">NC</div>
+                <div class="brand-text">
+                  <strong>NexConnect</strong>
+                  <span>Connect. Create. Earn.</span>
+                </div>
+              </div>
+
+              <div class="auth-tabs">
+                <button class="auth-tab ${mode === "login" ? "active" : ""}" data-auth-tab="login">Login</button>
+                <button class="auth-tab ${mode === "signup" ? "active" : ""}" data-auth-tab="signup">Signup</button>
+              </div>
+
+              <form id="login-form" class="auth-form ${mode === "login" ? "active" : ""}">
+                <div class="form-row">
+                  <label class="label">Email</label>
+                  <input class="field" name="email" type="email" required autocomplete="email" />
+                </div>
+                <div class="form-row">
+                  <label class="label">Password</label>
+                  <input class="field" name="password" type="password" required autocomplete="current-password" />
+                </div>
+                <button class="btn btn-primary" style="width:100%;" type="submit">
+                  <i data-lucide="log-in"></i> Login
+                </button>
+                <button class="btn btn-ghost js-google" style="width:100%;margin-top:10px;" type="button">
+                  <i data-lucide="chrome"></i> Continue with Google
+                </button>
+              </form>
+
+              <form id="signup-form" class="auth-form ${mode === "signup" ? "active" : ""}">
+                <div class="form-row">
+                  <label class="label">Full name</label>
+                  <input class="field" name="full_name" type="text" required autocomplete="name" />
+                </div>
+                <div class="form-row">
+                  <label class="label">Email</label>
+                  <input class="field" name="email" type="email" required autocomplete="email" />
+                </div>
+                <div class="form-row">
+                  <label class="label">Password</label>
+                  <input class="field" name="password" type="password" required minlength="8" autocomplete="new-password" />
+                </div>
+                <div class="form-row">
+                  <label class="label">Referral code <span style="color:var(--muted);font-weight:700;">optional</span></label>
+                  <input class="field mono" name="referral_code" type="text" value="${escapeAttr(referral || "")}" />
+                </div>
+                <button class="btn btn-primary" style="width:100%;" type="submit">
+                  <i data-lucide="user-plus"></i> Create account
+                </button>
+                <button class="btn btn-ghost js-google" style="width:100%;margin-top:10px;" type="button">
+                  <i data-lucide="chrome"></i> Continue with Google
+                </button>
+              </form>
+            </div>
+          </main>
+        </section>
+
+        <div id="google-modal" class="modal-overlay hidden">
+          <div class="modal">
+            <div class="page-head" style="margin-bottom:14px;">
+              <div>
+                <h2 class="card-title" style="margin:0;">Google OAuth Simulation</h2>
+                <p class="page-subtitle">Enter a Google email to generate a secure NexConnect session.</p>
+              </div>
+              <button class="icon-btn" id="close-google" type="button"><i data-lucide="x"></i></button>
+            </div>
+            <form id="google-form">
+              <div class="form-row">
+                <label class="label">Google email</label>
+                <input class="field" name="email" type="email" required />
+              </div>
+              <div class="form-row">
+                <label class="label">Name</label>
+                <input class="field" name="full_name" type="text" required />
+              </div>
+              <div class="form-row">
+                <label class="label">Referral code <span style="color:var(--muted);font-weight:700;">optional</span></label>
+                <input class="field mono" name="referral_code" type="text" value="${escapeAttr(referral || "")}" />
+              </div>
+              <button class="btn btn-primary" style="width:100%;" type="submit">
+                <i data-lucide="shield-check"></i> Continue
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+
+      attachAuthEvents();
+      refreshIcons();
+    }
+
+    function attachAuthEvents() {
+      document.querySelectorAll("[data-auth-tab]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const tab = btn.dataset.authTab;
+          const ref = getReferralFromLocation();
+          history.replaceState(null, "", tab === "signup" ? `#/signup${ref ? `?ref=${encodeURIComponent(ref)}` : ""}` : "#/login");
+          renderAuth(tab);
+        });
+      });
+
+      document.getElementById("login-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const btn = event.submitter;
+        setBusy(btn, true);
+        try {
+          const form = new FormData(event.currentTarget);
+          const payload = {
+            email: form.get("email"),
+            password: form.get("password")
+          };
+          const data = await api("/api/auth/login", { method: "POST", body: JSON.stringify(payload) });
+          await afterAuth(data);
+          toast("Welcome back to NexConnect.", "success");
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
+      });
+
+      document.getElementById("signup-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const btn = event.submitter;
+        setBusy(btn, true);
+        try {
+          const form = new FormData(event.currentTarget);
+          const payload = {
+            full_name: form.get("full_name"),
+            email: form.get("email"),
+            password: form.get("password"),
+            role: "normal_user",
+            referral_code: form.get("referral_code")
+          };
+          const data = await api("/api/auth/register", { method: "POST", body: JSON.stringify(payload) });
+          await afterAuth(data);
+          toast("Account created successfully.", "success");
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
+      });
+
+      document.querySelectorAll(".js-google").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.getElementById("google-modal").classList.remove("hidden");
+          refreshIcons();
+        });
+      });
+
+      document.getElementById("close-google").addEventListener("click", () => {
+        document.getElementById("google-modal").classList.add("hidden");
+      });
+
+      document.getElementById("google-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const btn = event.submitter;
+        setBusy(btn, true);
+        try {
+          const form = new FormData(event.currentTarget);
+          const payload = {
+            email: form.get("email"),
+            full_name: form.get("full_name"),
+            referral_code: form.get("referral_code")
+          };
+          const data = await api("/api/auth/google", { method: "POST", body: JSON.stringify(payload) });
+          await afterAuth(data);
+          toast("Google session created.", "success");
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
+      });
+    }
+
+    async function router() {
+      if (!state.token) {
+        renderAuthFromRoute();
+        return;
+      }
+
+      if (!state.user) {
+        await loadMe();
+      }
+
+      const route = getRoute();
+
+      try {
+        switch (route.name) {
+          case "":
+          case "home":
+            await renderHome(Object.fromEntries(route.query.entries()));
+            break;
+          case "product":
+            await renderProductDetail(route.params[0]);
+            break;
+          case "dashboard":
+            await renderDashboard(route.query.get("period") || "week");
+            break;
+          case "earnings":
+            await renderEarnings();
+            break;
+          case "withdraw":
+            await renderWithdraw();
+            break;
+          case "referrals":
+            await renderReferrals();
+            break;
+          case "bookmarks":
+            await renderBookmarks();
+            break;
+          case "support":
+            await renderSupport();
+            break;
+          case "leaderboard":
+            await renderLeaderboard(route.query.get("period") || "week");
+            break;
+          case "profile":
+            await renderProfile();
+            break;
+          default:
+            history.replaceState(null, "", "#/home");
+            await renderHome({});
+        }
+        maybeShowOnboarding();
+      } catch (error) {
+        renderShell(emptyState("triangle-alert", "Something went wrong", error.message), route.name || "home");
+        toast(error.message, "error");
+      }
+    }
+
+    function renderShell(content, active = "home") {
+      if (state.currentChart) {
+        state.currentChart.destroy();
+        state.currentChart = null;
+      }
+
+      const nav = [
+        ["home", "Home", "home", "#/home"],
+        ["dashboard", "Dashboard", "layout-dashboard", "#/dashboard"],
+        ["earnings", "Earnings", "wallet", "#/earnings"],
+        ["withdraw", "Withdraw", "banknote", "#/withdraw"],
+        ["support", "Support", "messages-square", "#/support"]
+      ];
+
+      const unread = state.notifications.filter(item => !item.is_read).length;
+      const roleText = roleLabel(state.user?.role);
+
+      document.getElementById("app").innerHTML = `
+        <div class="app-shell">
+          <header class="topbar">
+            <div class="topbar-inner">
+              <a href="#/home" class="brand">
+                <div class="brand-mark">NC</div>
+                <div class="brand-text">
+                  <strong>NexConnect</strong>
+                  <span>${DOMAIN}</span>
+                </div>
+              </a>
+
+              <nav class="nav-links">
+                ${nav.map(item => `
+                  <a class="nav-link ${active === item[0] ? "active" : ""}" href="${item[3]}">
+                    <i data-lucide="${item[2]}"></i> ${item[1]}
+                  </a>
+                `).join("")}
+              </nav>
+
+              <div class="top-actions">
+                <button class="icon-btn" id="notification-toggle" type="button" aria-label="Notifications">
+                  <i data-lucide="bell"></i>
+                  <span class="unread-dot ${unread ? "" : "hidden"}" data-unread-count>${unread}</span>
+                </button>
+
+                ${notificationPanelHtml()}
+
+                <button class="avatar-btn" id="profile-toggle" type="button">
+                  <span class="avatar-circle">${initials(state.user?.full_name || state.user?.email)}</span>
+                  <span>${escapeHtml(roleText)}</span>
+                  <i data-lucide="chevron-down"></i>
+                </button>
+
+                <div class="dropdown" id="profile-menu">
+                  <a href="#/profile"><i data-lucide="user-round"></i> Profile</a>
+                  <a href="#/referrals"><i data-lucide="users-round"></i> Referrals</a>
+                  <a href="#/bookmarks"><i data-lucide="bookmark"></i> Bookmarks</a>
+                  <a href="#/leaderboard"><i data-lucide="trophy"></i> Leaderboard</a>
+                  <button type="button" class="js-theme"><i data-lucide="moon-star"></i> Toggle dark mode</button>
+                  <button type="button" class="js-logout"><i data-lucide="log-out"></i> Logout</button>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main class="page">
+            ${content}
+          </main>
+        </div>
+      `;
+
+      attachShellEvents();
+      refreshIcons();
+    }
+
+    function attachShellEvents() {
+      document.querySelector(".js-logout")?.addEventListener("click", () => logout(true));
+      document.querySelector(".js-theme")?.addEventListener("click", toggleTheme);
+
+      document.getElementById("profile-toggle")?.addEventListener("click", () => {
+        document.getElementById("profile-menu").classList.toggle("open");
+        document.getElementById("notification-panel")?.classList.remove("open");
+      });
+
+      document.getElementById("notification-toggle")?.addEventListener("click", () => {
+        document.getElementById("notification-panel").classList.toggle("open");
+        document.getElementById("profile-menu")?.classList.remove("open");
+      });
+
+      document.querySelectorAll("[data-read-notification]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await markNotificationRead(btn.dataset.readNotification);
+        });
+      });
+
+      document.getElementById("mark-all-read")?.addEventListener("click", async () => {
+        const unread = state.notifications.filter(item => !item.is_read);
+        await Promise.all(unread.map(item => api(`/api/notifications/${item.id}/read`, { method: "PUT", body: JSON.stringify({}) }).catch(() => {})));
+        await loadNotifications();
+        renderShell(document.querySelector(".page")?.innerHTML || "", getRoute().name);
+      });
+    }
+
+    function notificationPanelHtml() {
+      const items = state.notifications.slice(0, 8);
+      return `
+        <div class="notification-panel" id="notification-panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px 12px;">
+            <strong>Notifications</strong>
+            <button class="btn btn-ghost" id="mark-all-read" type="button" style="padding:8px 10px;">Read all</button>
+          </div>
+          <div class="notification-list" id="notification-list">
+            ${items.length ? items.map(item => `
+              <div class="notification-item ${item.is_read ? "" : "unread"}" data-read-notification="${escapeAttr(item.id)}">
+                <strong>${escapeHtml(item.message)}</strong>
+                <small>${escapeHtml(item.type)} • ${formatDate(item.created_at)}</small>
+              </div>
+            `).join("") : `<div class="empty" style="padding:24px 12px;"><h3>No notifications</h3><p>You're all caught up.</p></div>`}
+          </div>
+        </div>
+      `;
+    }
+
+    function paintNotificationWidgets() {
+      const unread = state.notifications.filter(item => !item.is_read).length;
+      document.querySelectorAll("[data-unread-count]").forEach(el => {
+        el.textContent = unread;
+        el.classList.toggle("hidden", unread === 0);
+      });
+      const list = document.getElementById("notification-list");
+      if (list) {
+        list.innerHTML = state.notifications.slice(0, 8).map(item => `
+          <div class="notification-item ${item.is_read ? "" : "unread"}" data-read-notification="${escapeAttr(item.id)}">
+            <strong>${escapeHtml(item.message)}</strong>
+            <small>${escapeHtml(item.type)} • ${formatDate(item.created_at)}</small>
+          </div>
+        `).join("") || `<div class="empty" style="padding:24px 12px;"><h3>No notifications</h3><p>You're all caught up.</p></div>`;
+      }
+    }
+
+    async function markNotificationRead(id) {
+      await api(`/api/notifications/${id}/read`, { method: "PUT", body: JSON.stringify({}) });
+      await loadNotifications();
+    }
+
+    async function renderHome(filters = {}) {
+      const products = await loadProducts(filters);
+      const settings = state.settings || await loadSettings();
+      const categories = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+      const tags = [...new Set(products.flatMap(p => p.tags || []))].sort();
+
+      renderShell(`
+        <section class="hero">
+          ${settings.hero_banner_url ? `<div class="hero-bg" style="background-image:url('${escapeAttr(settings.hero_banner_url)}')"></div>` : ""}
+          <div class="hero-content">
+            <div class="hero-kicker"><i data-lucide="sparkles"></i> ${escapeHtml(settings.hero_title || "Connect. Create. Earn.")}</div>
+            <h1>${escapeHtml(settings.hero_title || "Creator monetization that feels premium.")}</h1>
+            <p>${escapeHtml(settings.hero_subtitle || "Pick products, generate your own NexConnect short links, share everywhere, and track clicks from a sleek dashboard.")}</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a href="#/dashboard" class="btn btn-light"><i data-lucide="bar-chart-3"></i> Open dashboard</a>
+              <a href="#/referrals" class="btn btn-light"><i data-lucide="users-round"></i> Invite creators</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="filter-panel">
+          <form id="filter-form" class="filters">
+            <div>
+              <label class="label">Search products</label>
+              <input class="field" id="search-input" name="search" value="${escapeAttr(filters.search || "")}" placeholder="Search title, category, tags..." autocomplete="off" />
+              <div class="autocomplete" id="autocomplete"></div>
+            </div>
+            <div>
+              <label class="label">Category</label>
+              <select class="field" name="category">
+                <option value="">All</option>
+                ${categories.map(cat => `<option value="${escapeAttr(cat)}" ${filters.category === cat ? "selected" : ""}>${escapeHtml(cat)}</option>`).join("")}
+              </select>
+            </div>
+            <div>
+              <label class="label">Tag</label>
+              <select class="field" name="tag">
+                <option value="">All</option>
+                ${tags.map(tag => `<option value="${escapeAttr(tag)}" ${filters.tag === tag ? "selected" : ""}>${escapeHtml(tag)}</option>`).join("")}
+              </select>
+            </div>
+            <div>
+              <label class="label">Min price</label>
+              <input class="field" name="min_price" type="number" min="0" value="${escapeAttr(filters.min_price || "")}" />
+            </div>
+            <div>
+              <label class="label">Max price</label>
+              <input class="field" name="max_price" type="number" min="0" value="${escapeAttr(filters.max_price || "")}" />
+            </div>
+            <button class="btn btn-primary" type="submit"><i data-lucide="filter"></i> Filter</button>
+          </form>
+        </section>
+
+        <div class="page-head">
+          <div>
+            <h2 class="page-title">Product Feed</h2>
+            <p class="page-subtitle">Products appear here after they are added by an admin or inserted directly in Supabase.</p>
+          </div>
+          <a href="#/bookmarks" class="btn btn-ghost"><i data-lucide="bookmark"></i> Saved products</a>
+        </div>
+
+        ${productGridHtml(products)}
+      `, "home");
+
+      attachHomeEvents(filters);
+      attachProductCardEvents();
+    }
+
+    async function loadProducts(filters = {}) {
+      const params = new URLSearchParams();
+      ["search", "category", "tag", "min_price", "max_price"].forEach(key => {
+        if (filters[key]) params.set(key, filters[key]);
+      });
+      const data = await api(`/api/products${params.toString() ? `?${params.toString()}` : ""}`);
+      state.products = data.products || [];
+      return state.products;
+    }
+
+    function attachHomeEvents() {
+      const form = document.getElementById("filter-form");
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+          if (String(value).trim()) params.set(key, String(value).trim());
+        }
+        location.hash = `#/home${params.toString() ? `?${params.toString()}` : ""}`;
+      });
+
+      const input = document.getElementById("search-input");
+      const box = document.getElementById("autocomplete");
+
+      input.addEventListener("input", () => {
+        const term = input.value.trim().toLowerCase();
+        if (!term) {
+          box.classList.remove("open");
+          box.innerHTML = "";
+          return;
+        }
+
+        const matches = state.products
+          .filter(p => `${p.title || ""} ${p.category || ""} ${(p.tags || []).join(" ")}`.toLowerCase().includes(term))
+          .slice(0, 6);
+
+        box.innerHTML = matches.map(item => `
+          <button type="button" data-suggestion="${escapeAttr(item.title)}">
+            <span>${escapeHtml(item.title)}</span>
+            <small>${formatMoney(item.sales_price)}</small>
+          </button>
+        `).join("");
+
+        box.classList.toggle("open", matches.length > 0);
+
+        box.querySelectorAll("[data-suggestion]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            input.value = btn.dataset.suggestion;
+            box.classList.remove("open");
+            form.requestSubmit();
+          });
+        });
+      });
+    }
+
+    function productGridHtml(products) {
+      if (!products.length) {
+        return emptyState("package-open", "No active products yet", "Once products are added with ImgBB image URLs and super links, they will appear here instantly.");
+      }
+      return `<section class="product-grid">${products.map(productCard).join("")}</section>`;
+    }
+
+    function productCard(product) {
+      const bookmarked = state.bookmarkIds.has(product.id);
+      return `
+        <article class="product-card">
+          <button class="bookmark-btn ${bookmarked ? "active" : ""}" data-bookmark="${escapeAttr(product.id)}" type="button" aria-label="Bookmark">
+            <i data-lucide="${bookmarked ? "bookmark-check" : "bookmark"}"></i>
+          </button>
+          <a class="product-image" href="#/product/${escapeAttr(product.id)}">
+            ${product.image_url ? `<img src="${escapeAttr(product.image_url)}" alt="${escapeAttr(product.title)}" loading="lazy" />` : `<div class="image-fallback"><i data-lucide="image"></i><span>No image URL</span></div>`}
+          </a>
+          <div class="product-body">
+            <h3 class="product-title">${escapeHtml(product.title)}</h3>
+            <div class="tags">${tagsHtml(product.tags || [])}</div>
+            <span class="badge badge-success"><i data-lucide="badge-dollar-sign"></i> ${formatMoney(product.commission_amount)} commission</span>
+            <div class="price-row">
+              <div>
+                <span class="price">${formatMoney(product.sales_price)}</span>
+                ${Number(product.real_price || 0) > Number(product.sales_price || 0) ? `<span class="real-price">${formatMoney(product.real_price)}</span>` : ""}
+              </div>
+            </div>
+            <div class="product-actions">
+              <a class="btn btn-ghost" href="#/product/${escapeAttr(product.id)}"><i data-lucide="eye"></i> View</a>
+              <button class="btn btn-primary js-get-link" data-product="${escapeAttr(product.id)}" type="button"><i data-lucide="link"></i> Get My Link</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function attachProductCardEvents() {
+      document.querySelectorAll(".js-get-link").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await generateLink(btn.dataset.product, btn);
+        });
+      });
+
+      document.querySelectorAll("[data-bookmark]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await toggleBookmark(btn.dataset.bookmark);
+        });
+      });
+    }
+
+    async function toggleBookmark(productId) {
+      try {
+        if (state.bookmarkIds.has(productId)) {
+          await api(`/api/bookmarks/${productId}`, { method: "DELETE" });
+          toast("Bookmark removed.", "success");
+        } else {
+          await api("/api/bookmarks", { method: "POST", body: JSON.stringify({ product_id: productId }) });
+          toast("Product saved.", "success");
+        }
+        await loadBookmarks();
+        await router();
+      } catch (error) {
+        toast(error.message, "error");
+      }
+    }
+
+    async function generateLink(productId, button) {
+      setBusy(button, true);
+      try {
+        const data = await api("/api/links/generate", {
+          method: "POST",
+          body: JSON.stringify({ product_id: productId })
+        });
+        showLinkModal(data.short_url, data.short_code);
+      } catch (error) {
+        toast(error.message, "error");
+      } finally {
+        setBusy(button, false);
+      }
+    }
+
+    function showLinkModal(shortUrl, shortCode) {
+      const shareText = `Check this product via my NexConnect link: ${shortUrl}`;
+      const modal = document.createElement("div");
+      modal.className = "modal-overlay";
+      modal.innerHTML = `
+        <div class="modal">
+          <div class="page-head" style="margin-bottom:14px;">
+            <div>
+              <h2 class="card-title" style="margin:0;">Your unique short link</h2>
+              <p class="page-subtitle">Format: ${SHORT_LINK_BASE}${escapeHtml(shortCode)}</p>
+            </div>
+            <button class="icon-btn js-close-modal" type="button"><i data-lucide="x"></i></button>
+          </div>
+          <div class="link-box mono">
+            <span>${escapeHtml(shortUrl)}</span>
+            <button class="btn btn-primary js-copy-link" type="button"><i data-lucide="copy"></i> Copy</button>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+            <a class="btn btn-success" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(shareText)}"><i data-lucide="send"></i> WhatsApp</a>
+            <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://t.me/share/url?url=${encodeURIComponent(shortUrl)}&text=${encodeURIComponent("NexConnect product link")}"><i data-lucide="send"></i> Telegram</a>
+            <button class="btn btn-ghost js-copy-caption" type="button"><i data-lucide="instagram"></i> Instagram caption</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      modal.querySelector(".js-close-modal").addEventListener("click", () => modal.remove());
+      modal.querySelector(".js-copy-link").addEventListener("click", () => copyText(shortUrl));
+      modal.querySelector(".js-copy-caption").addEventListener("click", () => copyText(shareText));
+      refreshIcons();
+    }
+
+    async function renderProductDetail(id) {
+      if (!id) throw new Error("Product ID is missing.");
+      const [detail, similarData] = await Promise.all([
+        api(`/api/products/${id}`),
+        api(`/api/products/${id}/similar`)
+      ]);
+
+      const product = detail.product;
+      const similar = similarData.products || [];
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">${escapeHtml(product.title)}</h1>
+            <p class="page-subtitle">${escapeHtml(product.category || "Uncategorized")} • ${formatMoney(product.commission_amount)} commission per sale</p>
+          </div>
+          <button class="btn btn-primary js-get-link" data-product="${escapeAttr(product.id)}" type="button"><i data-lucide="link"></i> Generate link</button>
+        </div>
+
+        <section class="detail-layout">
+          <div class="detail-media">
+            ${product.image_url ? `<img src="${escapeAttr(product.image_url)}" alt="${escapeAttr(product.title)}" />` : `<div class="image-fallback"><i data-lucide="image"></i><span>No ImgBB image URL available</span></div>`}
+          </div>
+
+          <div class="card">
+            <div class="tags">${tagsHtml(product.tags || [])}</div>
+            <h2 class="card-title">Product details</h2>
+            <p style="color:var(--muted);line-height:1.75;">${escapeHtml(product.description || "Product description has not been added yet.")}</p>
+
+            <div class="grid-even" style="margin:18px 0;">
+              <div class="stat-card">
+                <div class="stat-label">Sales price</div>
+                <div class="stat-value">${formatMoney(product.sales_price)}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Your commission</div>
+                <div class="stat-value" style="color:var(--success);">${formatMoney(product.commission_amount)}</div>
+              </div>
+            </div>
+
+            <div class="card" style="box-shadow:none;background:var(--surface-2);">
+              <h3 class="card-title">Profit calculator</h3>
+              <div class="form-grid">
+                <div>
+                  <label class="label">Expected sales</label>
+                  <input class="field" id="order-count" type="number" min="0" value="10" />
+                </div>
+                <div>
+                  <label class="label">Estimated earnings</label>
+                  <div class="field mono" id="profit-output">${formatMoney(Number(product.commission_amount || 0) * 10)}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:18px;">
+              <h3 class="card-title">Promotional toolkit</h3>
+              <div class="toolkit-grid">
+                ${toolkitSection("Captions", product.captions || [])}
+                ${toolkitSection("Hashtags", product.hashtags || [])}
+                ${toolkitSection("Scripts", product.scripts || [])}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top:26px;">
+          <div class="page-head">
+            <div>
+              <h2 class="page-title" style="font-size:2rem;">Similar products</h2>
+              <p class="page-subtitle">More products from the same category or tag group.</p>
+            </div>
+          </div>
+          ${productGridHtml(similar)}
+        </section>
+      `, "home");
+
+      document.getElementById("order-count").addEventListener("input", event => {
+        const count = Number(event.target.value || 0);
+        document.getElementById("profit-output").textContent = formatMoney(count * Number(product.commission_amount || 0));
+      });
+
+      document.querySelectorAll(".copy-tool").forEach(btn => {
+        btn.addEventListener("click", () => copyText(btn.dataset.copy));
+      });
+
+      attachProductCardEvents();
+    }
+
+    function toolkitSection(title, items) {
+      if (!items.length) {
+        return `<div class="copy-box"><p>${escapeHtml(title)} are not available for this product yet.</p></div>`;
+      }
+      return `
+        <div>
+          <strong style="display:block;margin-bottom:8px;">${escapeHtml(title)}</strong>
+          ${items.map(item => `
+            <div class="copy-box" style="margin-bottom:8px;">
+              <p>${escapeHtml(item)}</p>
+              <button class="btn btn-ghost copy-tool" data-copy="${escapeAttr(item)}" type="button"><i data-lucide="copy"></i></button>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    async function renderDashboard(period = "week") {
+      const data = await api(`/api/clicks/stats?period=${encodeURIComponent(period)}`);
+      const stats = data.stats;
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Creator Dashboard</h1>
+            <p class="page-subtitle">Track clicks, conversions, earnings, and your best performing products.</p>
+          </div>
+          <div class="period-tabs">
+            <button class="period-tab ${period === "week" ? "active" : ""}" data-dashboard-period="week">Weekly</button>
+            <button class="period-tab ${period === "month" ? "active" : ""}" data-dashboard-period="month">Monthly</button>
+          </div>
+        </div>
+
+        <section class="stat-grid">
+          ${statCard("mouse-pointer-click", "Total Clicks", stats.total_clicks)}
+          ${statCard("wallet", "Total Earnings", formatMoney(stats.total_earnings))}
+          ${statCard("users-round", "Referral Earnings", formatMoney(stats.referral_earnings))}
+          ${statCard("percent", "Conversion Rate", `${stats.conversion_rate}%`)}
+        </section>
+
+        <section class="grid-2">
+          <div class="chart-card">
+            <h2 class="card-title">Performance</h2>
+            <canvas id="performance-chart" height="120"></canvas>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Top product</h2>
+            ${stats.top_product ? `
+              <h3 style="font-family:Sora;margin:0 0 8px;">${escapeHtml(stats.top_product.title)}</h3>
+              <p class="page-subtitle">${stats.top_product.clicks} clicks tracked</p>
+              <a class="btn btn-primary" href="#/product/${escapeAttr(stats.top_product.id)}"><i data-lucide="eye"></i> View product</a>
+            ` : emptyState("package-search", "No top product yet", "Your top product appears after link clicks are recorded.")}
+          </div>
+        </section>
+
+        <section class="table-card" style="margin-top:18px;">
+          <h2 class="card-title">Recent clicks</h2>
+          ${clickTable(stats.recent_clicks || [])}
+        </section>
+      `, "dashboard");
+
+      document.querySelectorAll("[data-dashboard-period]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          location.hash = `#/dashboard?period=${btn.dataset.dashboardPeriod}`;
+        });
+      });
+
+      renderDashboardChart(stats.chart);
+    }
+
+    function statCard(iconName, label, value) {
+      return `
+        <div class="stat-card">
+          <div class="stat-icon"><i data-lucide="${iconName}"></i></div>
+          <div class="stat-label">${escapeHtml(label)}</div>
+          <div class="stat-value">${escapeHtml(String(value))}</div>
+        </div>
+      `;
+    }
+
+    function clickTable(rows) {
+      if (!rows.length) return emptyState("mouse-pointer-click", "No clicks yet", "Generate a short link and share it to start tracking clicks.");
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Product</th><th>Short code</th><th>IP</th><th>Time</th></tr></thead>
+            <tbody>
+              ${rows.map(row => `
+                <tr>
+                  <td>${escapeHtml(row.product_title || "Product")}</td>
+                  <td class="mono">${escapeHtml(row.short_code)}</td>
+                  <td>${escapeHtml(row.ip_address || "Unknown")}</td>
+                  <td>${formatDate(row.created_at)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderDashboardChart(chart) {
+      const canvas = document.getElementById("performance-chart");
+      if (!canvas || !chart) return;
+
+      const styles = getComputedStyle(document.documentElement);
+      state.currentChart = new Chart(canvas, {
+        type: "line",
+        data: {
+          labels: chart.labels || [],
+          datasets: [{
+            label: "Clicks",
+            data: chart.values || [],
+            borderColor: styles.getPropertyValue("--primary").trim(),
+            backgroundColor: "rgba(124,58,237,0.12)",
+            fill: true,
+            tension: 0.42,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+          }
+        }
+      });
+    }
+
+    async function renderEarnings() {
+      await loadMe();
+      const [statsData, referralData] = await Promise.all([
+        api("/api/clicks/stats"),
+        api("/api/referrals/stats")
+      ]);
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Earnings</h1>
+            <p class="page-subtitle">Monitor your direct commissions, referral rewards, balance, and growth.</p>
+          </div>
+          <a class="btn btn-success" href="#/withdraw"><i data-lucide="banknote"></i> Withdraw</a>
+        </div>
+
+        <section class="stat-grid">
+          ${statCard("wallet", "Available Balance", formatMoney(state.user.balance))}
+          ${statCard("badge-dollar-sign", "Direct Earnings", formatMoney(state.user.total_earnings))}
+          ${statCard("users-round", "Referral Earnings", formatMoney(state.user.referral_earnings))}
+          ${statCard("percent", "Conversion Rate", `${statsData.stats.conversion_rate}%`)}
+        </section>
+
+        <section class="grid-even" style="margin-top:18px;">
+          <div class="card">
+            <h2 class="card-title">Referral code</h2>
+            <div class="link-box mono">
+              <span>${escapeHtml(state.user.referral_code)}</span>
+              <button class="btn btn-primary" onclick="copyText('${escapeAttr(state.user.referral_code)}')"><i data-lucide="copy"></i> Copy</button>
+            </div>
+            <p class="page-subtitle">Every referred user is permanently linked to your account.</p>
+          </div>
+          <div class="card">
+            <h2 class="card-title">Referral summary</h2>
+            <div class="stat-value">${escapeHtml(String(referralData.stats.total_referrals || 0))}</div>
+            <p class="page-subtitle">Total referred users</p>
+            <a class="btn btn-ghost" href="#/referrals"><i data-lucide="arrow-right"></i> Referral page</a>
+          </div>
+        </section>
+      `, "earnings");
+    }
+
+    async function renderWithdraw() {
+      await Promise.all([loadMe(), loadSettings()]);
+      const data = await api("/api/withdrawals");
+      const withdrawals = data.withdrawals || [];
+      const minWithdrawal = Number(state.settings.min_withdrawal || 100);
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Withdraw</h1>
+            <p class="page-subtitle">Minimum withdrawal: <strong>${formatMoney(minWithdrawal)}</strong></p>
+          </div>
+          <div class="badge badge-success" style="font-size:.9rem;">Balance ${formatMoney(state.user.balance)}</div>
+        </div>
+
+        <section class="grid-2">
+          <div class="card">
+            <h2 class="card-title">Request payout</h2>
+            <div class="method-tabs" style="margin-bottom:14px;">
+              <button class="method-tab active" data-method="upi" type="button">UPI</button>
+              <button class="method-tab" data-method="bank" type="button">Bank Transfer</button>
+            </div>
+
+            <form id="withdraw-form">
+              <input type="hidden" name="method" id="withdraw-method" value="upi" />
+              <div class="form-row">
+                <label class="label">Amount</label>
+                <input class="field" name="amount" type="number" min="${minWithdrawal}" step="0.01" required />
+              </div>
+
+              <div id="upi-fields">
+                <div class="form-row">
+                  <label class="label">UPI ID</label>
+                  <input class="field" name="upi_id" placeholder="name@bank" />
+                </div>
+              </div>
+
+              <div id="bank-fields" class="hidden">
+                <div class="form-row">
+                  <label class="label">Account holder name</label>
+                  <input class="field" name="bank_holder" />
+                </div>
+                <div class="form-grid">
+                  <div class="form-row">
+                    <label class="label">Account number</label>
+                    <input class="field" name="bank_account" />
+                  </div>
+                  <div class="form-row">
+                    <label class="label">IFSC</label>
+                    <input class="field" name="bank_ifsc" />
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-success" type="submit"><i data-lucide="send"></i> Submit request</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Payout rules</h2>
+            <p class="page-subtitle">Your balance is reserved immediately after a withdrawal request. If rejected, it is automatically returned to your balance.</p>
+            <div class="link-box mono" style="margin-top:14px;">
+              <span>Support: ${escapeHtml(state.settings.support_email || "support@nexconnect.com")}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="table-card" style="margin-top:18px;">
+          <h2 class="card-title">Withdrawal history</h2>
+          ${withdrawalTable(withdrawals)}
+        </section>
+      `, "withdraw");
+
+      attachWithdrawEvents();
+    }
+
+    function attachWithdrawEvents() {
+      document.querySelectorAll("[data-method]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("[data-method]").forEach(item => item.classList.remove("active"));
+          btn.classList.add("active");
+          const method = btn.dataset.method;
+          document.getElementById("withdraw-method").value = method;
+          document.getElementById("upi-fields").classList.toggle("hidden", method !== "upi");
+          document.getElementById("bank-fields").classList.toggle("hidden", method !== "bank");
+        });
+      });
+
+      document.getElementById("withdraw-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const btn = event.submitter;
+        setBusy(btn, true);
+        try {
+          const form = new FormData(event.currentTarget);
+          const method = form.get("method");
+          const payload = {
+            amount: Number(form.get("amount")),
+            method,
+            upi_id: form.get("upi_id"),
+            bank_holder: form.get("bank_holder"),
+            bank_account: form.get("bank_account"),
+            bank_ifsc: form.get("bank_ifsc")
+          };
+          await api("/api/withdrawals", { method: "POST", body: JSON.stringify(payload) });
+          toast("Withdrawal request submitted.", "success");
+          await renderWithdraw();
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
+      });
+    }
+
+    function withdrawalTable(rows) {
+      if (!rows.length) return emptyState("banknote", "No withdrawals yet", "Your withdrawal requests and statuses will appear here.");
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Amount</th><th>Method</th><th>Status</th><th>Reason</th><th>Requested</th></tr></thead>
+            <tbody>
+              ${rows.map(row => `
+                <tr>
+                  <td>${formatMoney(row.amount)}</td>
+                  <td>${escapeHtml(row.method)}</td>
+                  <td><span class="badge ${row.status === "approved" ? "badge-success" : row.status === "rejected" ? "badge-danger" : "badge-info"}">${escapeHtml(row.status)}</span></td>
+                  <td>${escapeHtml(row.reason || "-")}</td>
+                  <td>${formatDate(row.created_at)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    async function renderReferrals() {
+      const data = await api("/api/referrals");
+      const referralLink = data.referral_link || `https://${DOMAIN}/#/signup?ref=${encodeURIComponent(data.referral_code)}`;
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Referrals</h1>
+            <p class="page-subtitle">Invite users and earn 5% from every credited commission they generate.</p>
+          </div>
+        </div>
+
+        <section class="grid-even">
+          <div class="card">
+            <h2 class="card-title">Your referral code</h2>
+            <div class="link-box mono">
+              <span>${escapeHtml(data.referral_code)}</span>
+              <button class="btn btn-primary" onclick="copyText('${escapeAttr(data.referral_code)}')"><i data-lucide="copy"></i> Copy</button>
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="card-title">Share link</h2>
+            <div class="link-box mono">
+              <span>${escapeHtml(referralLink)}</span>
+              <button class="btn btn-primary" onclick="copyText('${escapeAttr(referralLink)}')"><i data-lucide="copy"></i> Copy</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="stat-grid" style="margin-top:18px;">
+          ${statCard("users-round", "Referred Users", data.summary.total_referrals)}
+          ${statCard("badge-dollar-sign", "Referral Earnings", formatMoney(data.summary.total_referral_earnings))}
+          ${statCard("wallet", "Current Balance", formatMoney(state.user.balance))}
+          ${statCard("sparkles", "Bonus Rate", "5%")}
+        </section>
+
+        <section class="table-card" style="margin-top:18px;">
+          <h2 class="card-title">Referred users</h2>
+          ${referralTable(data.referrals || [])}
+        </section>
+
+        <section class="table-card" style="margin-top:18px;">
+          <h2 class="card-title">Referral earnings breakdown</h2>
+          ${referralEarningsTable(data.earnings || [])}
+        </section>
+      `, "earnings");
+    }
+
+    function referralTable(rows) {
+      if (!rows.length) return emptyState("users-round", "No referred users yet", "Share your referral code to start building your referral tree.");
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>User</th><th>Role</th><th>Tier</th><th>Joined</th></tr></thead>
+            <tbody>
+              ${rows.map(row => `
+                <tr>
+                  <td>${escapeHtml(row.full_name || row.email)}</td>
+                  <td>${escapeHtml(roleLabel(row.role))}</td>
+                  <td>${tierBadge(row.tier)}</td>
+                  <td>${formatDate(row.created_at)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function referralEarningsTable(rows) {
+      if (!rows.length) return emptyState("badge-dollar-sign", "No referral earnings yet", "Referral earnings appear after referred users generate credited commissions.");
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Amount</th><th>Referred User</th><th>Date</th></tr></thead>
+            <tbody>
+              ${rows.map(row => `
+                <tr>
+                  <td>${formatMoney(row.amount)}</td>
+                  <td class="mono">${escapeHtml(row.referred_id)}</td>
+                  <td>${formatDate(row.created_at)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    async function renderBookmarks() {
+      await loadBookmarks();
+      const products = state.bookmarks.map(item => item.product).filter(Boolean);
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Bookmarks</h1>
+            <p class="page-subtitle">Your saved products for faster promotion.</p>
+          </div>
+          <a class="btn btn-primary" href="#/home"><i data-lucide="plus"></i> Find products</a>
+        </div>
+        ${productGridHtml(products)}
+      `, "home");
+
+      attachProductCardEvents();
+    }
+
+    async function renderSupport() {
+      const [supportData] = await Promise.all([api("/api/support"), loadSettings()]);
+      const messages = supportData.messages || [];
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Support</h1>
+            <p class="page-subtitle">Need help? Send a message to the NexConnect team.</p>
+          </div>
+          <div class="badge badge-info">${escapeHtml(state.settings.support_email || "support@nexconnect.com")}</div>
+        </div>
+
+        <section class="grid-2">
+          <div class="card">
+            <h2 class="card-title">Send message</h2>
+            <form id="support-form">
+              <div class="form-row">
+                <label class="label">Message</label>
+                <textarea class="field" name="message" rows="7" required maxlength="2000"></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit"><i data-lucide="send"></i> Send</button>
+            </form>
+          </div>
+          <div class="card">
+            <h2 class="card-title">Support history</h2>
+            <div class="support-thread">
+              ${messages.length ? messages.map(message => `
+                <div class="message-bubble">
+                  <strong>You</strong>
+                  <p>${escapeHtml(message.message)}</p>
+                  <small>${formatDate(message.created_at)}</small>
+                  ${message.reply ? `<div class="message-reply"><strong>Admin reply</strong><p>${escapeHtml(message.reply)}</p><small>${formatDate(message.replied_at)}</small></div>` : ""}
+                </div>
+              `).join("") : emptyState("messages-square", "No messages yet", "Your messages and admin replies will appear here.")}
+            </div>
+          </div>
+        </section>
+      `, "support");
+
+      document.getElementById("support-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const btn = event.submitter;
+        setBusy(btn, true);
+        try {
+          const form = new FormData(event.currentTarget);
+          await api("/api/support", { method: "POST", body: JSON.stringify({ message: form.get("message") }) });
+          toast("Message sent.", "success");
+          await renderSupport();
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
+      });
+    }
+
+    async function renderLeaderboard(period = "week") {
+      const data = await api(`/api/users/leaderboard?period=${encodeURIComponent(period)}`);
+      const rows = data.leaderboard || [];
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Leaderboard</h1>
+            <p class="page-subtitle">Top earners ranked by credited commission performance.</p>
+          </div>
+          <div class="period-tabs">
+            <button class="period-tab ${period === "week" ? "active" : ""}" data-leader-period="week">Week</button>
+            <button class="period-tab ${period === "month" ? "active" : ""}" data-leader-period="month">Month</button>
+            <button class="period-tab ${period === "all" ? "active" : ""}" data-leader-period="all">All time</button>
+          </div>
+        </div>
+
+        <section class="table-card">
+          ${rows.length ? `
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Rank</th><th>User</th><th>Tier</th><th>Earnings</th></tr></thead>
+                <tbody>
+                  ${rows.map((row, index) => `
+                    <tr>
+                      <td class="mono">#${index + 1}</td>
+                      <td>${escapeHtml(row.full_name || row.email)}</td>
+                      <td>${tierBadge(row.tier)}</td>
+                      <td>${formatMoney(row.earnings)}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          ` : emptyState("trophy", "Leaderboard is empty", "Credited commissions will populate the leaderboard.")}
+        </section>
+      `, "leaderboard");
+
+      document.querySelectorAll("[data-leader-period]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          location.hash = `#/leaderboard?period=${btn.dataset.leaderPeriod}`;
+        });
+      });
+    }
+
+    async function renderProfile() {
+      await loadMe();
+
+      renderShell(`
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Profile</h1>
+            <p class="page-subtitle">Manage identity, creator links, and social reach.</p>
+          </div>
+        </div>
+
+        <section class="card">
+          <form id="profile-form">
+            <div class="form-grid">
+              <div class="form-row">
+                <label class="label">Full name</label>
+                <input class="field" name="full_name" value="${escapeAttr(state.user.full_name || "")}" />
+              </div>
+              <div class="form-row">
+                <label class="label">Role</label>
+                ${state.user.role === "admin" ? `<div class="field">Admin</div>` : `
+                  <select class="field" name="role">
+                    <option value="normal_user" ${state.user.role === "normal_user" ? "selected" : ""}>Normal User</option>
+                    <option value="influencer" ${state.user.role === "influencer" ? "selected" : ""}>Content Creator</option>
+                  </select>
+                `}
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-row">
+                <label class="label">YouTube link</label>
+                <input class="field" name="youtube_link" value="${escapeAttr(state.user.youtube_link || "")}" />
+              </div>
+              <div class="form-row">
+                <label class="label">Instagram link</label>
+                <input class="field" name="instagram_link" value="${escapeAttr(state.user.instagram_link || "")}" />
+              </div>
+              <div class="form-row">
+                <label class="label">TikTok link</label>
+                <input class="field" name="tiktok_link" value="${escapeAttr(state.user.tiktok_link || "")}" />
+              </div>
+              <div class="form-row">
+                <label class="label">Follower count</label>
+                <input class="field" name="follower_count" type="number" min="0" value="${escapeAttr(state.user.follower_count || 0)}" />
+              </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit"><i data-lucide="save"></i> Save profile</button>
+          </form>
+        </section>
+      `, "profile");
+
+      document.getElementById("profile-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        const btn = event.submitter;
+        setBusy(btn, true);
+        try {
+          const form = new FormData(event.currentTarget);
+          const payload = {
+            full_name: form.get("full_name"),
+            role: form.get("role") || state.user.role,
+            youtube_link: form.get("youtube_link"),
+            instagram_link: form.get("instagram_link"),
+            tiktok_link: form.get("tiktok_link"),
+            follower_count: Number(form.get("follower_count") || 0)
+          };
+          const data = await api("/api/users/profile", { method: "PUT", body: JSON.stringify(payload) });
+          state.user = data.user;
+          toast("Profile updated.", "success");
+          await router();
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
+      });
+    }
+
+    function maybeShowOnboarding() {
+      if (!state.user || state.user.role === "admin" || state.user.onboarding_completed || state.onboardingOpen) return;
+      setTimeout(showOnboarding, 250);
+    }
+
+    function showOnboarding() {
+      if (state.onboardingOpen) return;
+      state.onboardingOpen = true;
+
+      let step = 1;
+      const data = {
+        role: "influencer",
+        youtube_link: "",
+        instagram_link: "",
+        tiktok_link: "",
+        follower_count: 0
+      };
+
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay";
+      document.body.appendChild(overlay);
+
+      const paint = () => {
+        overlay.innerHTML = `
+          <div class="modal">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;">
+              <div>
+                <h2 class="card-title" style="margin:0;">Welcome to NexConnect</h2>
+                <p class="page-subtitle">Step ${step} of 3</p>
+              </div>
+              <span class="badge badge-info">Onboarding</span>
+            </div>
+
+            ${step === 1 ? `
+              <h3 class="card-title">Choose your role</h3>
+              <div class="role-grid">
+                <div class="role-card ${data.role === "influencer" ? "selected" : ""}" data-on-role="influencer">
+                  <i data-lucide="video"></i>
+                  <h3>Content Creator</h3>
+                  <p class="page-subtitle">Promote products, track clicks, earn commissions.</p>
+                </div>
+                <div class="role-card ${data.role === "normal_user" ? "selected" : ""}" data-on-role="normal_user">
+                  <i data-lucide="user-round"></i>
+                  <h3>Normal User</h3>
+                  <p class="page-subtitle">Browse products, save favorites, use referrals.</p>
+                </div>
+              </div>
+              <button class="btn btn-primary" id="on-next" style="margin-top:16px;width:100%;">Continue</button>
+            ` : ""}
+
+            ${step === 2 ? `
+              <h3 class="card-title">${data.role === "influencer" ? "Add creator channels" : "Confirm preferences"}</h3>
+              ${data.role === "influencer" ? `
+                <div class="form-row">
+                  <label class="label">YouTube link</label>
+                  <input class="field" id="on-youtube" value="${escapeAttr(data.youtube_link)}" />
+                </div>
+                <div class="form-row">
+                  <label class="label">Instagram link</label>
+                  <input class="field" id="on-instagram" value="${escapeAttr(data.instagram_link)}" />
+                </div>
+                <div class="form-row">
+                  <label class="label">TikTok link</label>
+                  <input class="field" id="on-tiktok" value="${escapeAttr(data.tiktok_link)}" />
+                </div>
+                <div class="form-row">
+                  <label class="label">Follower count</label>
+                  <input class="field" id="on-followers" type="number" min="0" value="${escapeAttr(data.follower_count)}" />
+                </div>
+              ` : `<p class="page-subtitle">You can still generate links, bookmark products, and use referrals. You may switch to creator mode anytime from Profile.</p>`}
+              <div style="display:flex;gap:10px;">
+                <button class="btn btn-ghost" id="on-back">Back</button>
+                <button class="btn btn-primary" id="on-next">Continue</button>
+              </div>
+            ` : ""}
+
+            ${step === 3 ? `
+              <h3 class="card-title">Explore the platform</h3>
+              <p class="page-subtitle">Your dashboard, links, withdrawals, referrals, bookmarks, support, notifications, and leaderboard are ready.</p>
+              <div class="grid-even">
+                <div class="card" style="box-shadow:none;background:var(--surface-2);"><i data-lucide="link"></i><strong style="display:block;margin-top:8px;">Get product links</strong></div>
+                <div class="card" style="box-shadow:none;background:var(--surface-2);"><i data-lucide="wallet"></i><strong style="display:block;margin-top:8px;">Withdraw earnings</strong></div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:16px;">
+                <button class="btn btn-ghost" id="on-back">Back</button>
+                <button class="btn btn-success" id="finish-onboarding">Start earning</button>
+              </div>
+            ` : ""}
+          </div>
+        `;
+
+        overlay.querySelectorAll("[data-on-role]").forEach(card => {
+          card.addEventListener("click", () => {
+            data.role = card.dataset.onRole;
+            paint();
+          });
+        });
+
+        overlay.querySelector("#on-back")?.addEventListener("click", () => {
+          step = Math.max(1, step - 1);
+          paint();
+        });
+
+        overlay.querySelector("#on-next")?.addEventListener("click", () => {
+          if (step === 2 && data.role === "influencer") {
+            data.youtube_link = overlay.querySelector("#on-youtube").value;
+            data.instagram_link = overlay.querySelector("#on-instagram").value;
+            data.tiktok_link = overlay.querySelector("#on-tiktok").value;
+            data.follower_count = Number(overlay.querySelector("#on-followers").value || 0);
+          }
+          step = Math.min(3, step + 1);
+          paint();
+        });
+
+        overlay.querySelector("#finish-onboarding")?.addEventListener("click", async () => {
+          try {
+            const response = await api("/api/users/profile", {
+              method: "PUT",
+              body: JSON.stringify({
+                role: data.role,
+                youtube_link: data.youtube_link,
+                instagram_link: data.instagram_link,
+                tiktok_link: data.tiktok_link,
+                follower_count: data.follower_count,
+                onboarding_completed: true
+              })
+            });
+            state.user = response.user;
+            state.onboardingOpen = false;
+            overlay.remove();
+            toast("Onboarding completed.", "success");
+            await router();
+          } catch (error) {
+            toast(error.message, "error");
+          }
+        });
+
+        refreshIcons();
+      };
+
+      paint();
+    }
+
+    function getRoute() {
+      const hash = location.hash || "#/home";
+      const clean = hash.replace(/^#/, "");
+      const [pathPart, queryPart = ""] = clean.split("?");
+      const parts = pathPart.split("/").filter(Boolean);
+      return {
+        name: parts[0] || "home",
+        params: parts.slice(1),
+        query: new URLSearchParams(queryPart)
+      };
+    }
+
+    function getReferralFromLocation() {
+      const route = getRoute();
+      return route.query.get("ref") || new URLSearchParams(location.search).get("ref") || "";
+    }
+
+    function tagsHtml(tags) {
+      return (tags || []).slice(0, 4).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+    }
+
+    function tierBadge(tier) {
+      const label = String(tier || "bronze").toLowerCase();
+      const cls = label === "gold" ? "badge-gold" : label === "silver" ? "badge-info" : "badge-success";
+      return `<span class="badge ${cls}"><i data-lucide="award"></i> ${escapeHtml(label)}</span>`;
+    }
+
+    function emptyState(icon, title, text) {
+      return `
+        <div class="empty">
+          <i data-lucide="${icon}"></i>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(text)}</p>
+        </div>
+      `;
+    }
+
+    function roleLabel(role) {
+      if (role === "admin") return "Admin";
+      if (role === "influencer") return "Creator";
+      return "User";
+    }
+
+    function initials(value) {
+      const text = String(value || "NC").trim();
+      const parts = text.includes("@") ? [text[0], text.split("@")[0][1] || "C"] : text.split(/\s+/).slice(0, 2).map(p => p[0]);
+      return parts.join("").toUpperCase().slice(0, 2);
+    }
+
+    function formatMoney(value) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 2
+      }).format(Number(value || 0));
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+
+    function setBusy(button, busy) {
+      if (!button) return;
+      if (busy) {
+        button.dataset.originalHtml = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = `<i data-lucide="loader-2"></i> Please wait`;
+        refreshIcons();
+      } else {
+        button.disabled = false;
+        if (button.dataset.originalHtml) button.innerHTML = button.dataset.originalHtml;
+        refreshIcons();
+      }
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      toast("Copied to clipboard.", "success");
+    }
+
+    function toast(message, type = "success") {
+      const root = document.getElementById("toast-root");
+      const item = document.createElement("div");
+      item.className = `toast ${type}`;
+      item.innerHTML = `<i data-lucide="${type === "error" ? "circle-alert" : "circle-check"}"></i><span>${escapeHtml(message)}</span>`;
+      root.appendChild(item);
+      refreshIcons();
+      setTimeout(() => item.remove(), 3800);
+    }
+
+    function refreshIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+</html>
